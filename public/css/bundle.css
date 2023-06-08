@@ -1,0 +1,80 @@
+.logobundle,.logofilter{
+    font-size: 60px;
+    margin-right: 10px;
+}
+.titlebundle{
+    font-size: 26px;
+}
+.input {
+    border:none;
+    padding: 5px 0px 5px 0px;
+    margin: 0px 0px 0px 15px;
+    width: 100%;
+    outline: none;
+    background-color: transparent;
+    font-size: 20px;
+}
+[placeholder]:focus::-webkit-input-placeholder {
+    transition: text-indent 0.2s 0.2s ease; 
+    text-indent: -200%;
+    opacity: 1;
+}
+.formbundle{
+    border-bottom: 1px solid black;
+    width: 50%;
+}
+.formContainer{
+    display: flex;
+    justify-content: end;
+}
+.bundle-head{
+    padding: 0px 100px !important;
+}
+button{
+    border: none;
+    background-color: transparent;
+}
+.fa-magnifying-glass{
+    font-size: 20px;
+}
+.mainlogobundle{
+    justify-content: flex-start;
+}
+.viewAllButton{
+    color: #5B6CFF;
+    font-size: large;
+    font-weight: bold;
+}
+.logofilter{
+    transform: rotate(90deg); 
+}
+@media only screen and (max-width:1024px){
+    .content{
+        padding: 10px !important;
+    }
+    .card-div{
+        margin: 10px 0px !important;
+    }
+    .bundle-head{
+        padding: 0px !important;
+    }
+    .formbundle{
+        width: 100%;
+        float: right;
+    }
+}
+@media only screen and (max-width:600px){
+    .main-bundle{
+        flex-direction: column;
+    }
+    .mainlogobundle{
+        justify-content: center;
+    }
+    .formbundle{
+        width: 60%;
+        float: none;
+    }
+    .formContainer{
+        justify-content: center !important;
+    }
+}
