@@ -26,7 +26,7 @@
                         @csrf
                             <div class="col-12">
                                 <span>Please verify your account</span>
-                                <input type="email" class="input" name="user_email" id="email" placeholder="Email Address">
+                                <input type="email" class="input" name="email" id="email" placeholder="Email Address">
                             </div>
                             <div class="col-12" style="margin-top:120px">
                                <button type="submit" class="btn btn-next text-white float-end">Verify</button> <button type="submit" class="btn btn-next text-black float-end" style="background-color: #C4C3C3 !important; margin-right: 10px;">Back</button>

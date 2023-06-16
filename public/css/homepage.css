@@ -18,6 +18,7 @@ a:link{
 }
 .logo{
     width: 60px !important;
+    height: 60px !important;
 }
 .close{
     border: none;
@@ -44,6 +45,7 @@ a:link{
 .username{
     border-radius: 50%;
     width: 60px;
+    height: 60px;
     border: 2px solid white;
 }
 .offcanvas-start{
@@ -77,8 +79,10 @@ a:link{
     margin-right: 20px;
 }
 .menu-title{
-    font-size: 20px !important;
+    font-size: 15px !important;
     font-weight: bold !important;
+    white-space: nowrap !important;
+    
 }
 .name-menu-title{
     font-size: 13px !important;
@@ -185,6 +189,7 @@ input:checked+.slider:before {
     }
     .username{
         width: 40px;
+        height: 40px;
     }
     .icon-search{
         padding: 0px 10px !important;
@@ -201,9 +206,11 @@ input:checked+.slider:before {
     }
     .logo{
         width: 50px !important;
+        height: 50px !important; 
     }
     .logo-div{
         width: auto;
+        height: auto;
     }
     .search{
         display: none;

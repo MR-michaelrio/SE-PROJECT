@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recipe;
+use App\Models\recipe_publish;
 use App\Models\Category;
+use App\Models\Bundle_List;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class Recipe_Controller extends Controller
 {
     /**
@@ -16,6 +21,36 @@ class Recipe_Controller extends Controller
     {
         $category = Category::all();
         return view('create-recipe', compact('category'));
+    }
+
+    public function foodrecipe($id){
+        $recipe = recipe::where('recipe_id',$id)->get();
+        $recipe_publish = recipe_publish::take(15)->get();
+        // dd($recipe);
+        return view('food-recipe',compact('recipe','recipe_publish'));
+    }
+
+    public function bundlerecipe($id,$bundlelistid,$user){
+        DB::statement('SET sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""))');
+
+        $bundle = Bundle_List::whereHas('MyBundle', function ($query) use ($user,$bundlelistid){
+            $query->where('Bundle_privacy', 'on');
+            $query->where('user_id', $user);
+            $query->where('bundlelist_id', $bundlelistid);
+        })->where('bundle_id', $id)->get();
+
+        $bundlelist = Bundle_List::whereHas('MyBundle', function ($query) use ($user,$bundlelistid){
+            $query->where('Bundle_privacy', 'on');
+            $query->where('user_id', $user);
+        })->where('bundle_id', $id)->get();
+
+        $recipe = recipe_publish::take(15)->get();
+
+        // $bundle = Bundle_List::where('bundlelist_id',$id)->get();
+
+        // dd($bundle);
+
+        return view('bundle-recipe',compact('bundle','bundlelist','recipe'));
     }
 
     /**
@@ -42,9 +77,11 @@ class Recipe_Controller extends Controller
         $recipe_tips = implode(", ", $request->input('recipe_tips'));
 
         $recipe_picture = $request->file('recipe_picture');
-        $imageName = time().'.'.$image->extension();
-
+        $imageName = time().'.'.$recipe_picture->extension();
+        $bundlelistid = time() . mt_rand(1000, 9999);
+        // dd(Auth::id());
         $blog = Recipe::create([
+            'recipe_id' => $bundlelistid,
             'recipe_name' => $request->recipe_name,
             'recipe_ingredients' => $recipe_ingredients,
             'recipe_equipment' => $recipe_equipment,
@@ -53,11 +90,48 @@ class Recipe_Controller extends Controller
             'recipe_picture' => $imageName,
             'category_id' => $request->category_id,
         ]);
-
-        $recipe_picture->move(public_path('images'), $imageName);
-
-        return redirect('/');
+        if($blog){
+            $publish = recipe_publish::create([
+                'user_id' => Auth::id(),
+                'recipe_id' => $bundlelistid,
+                'publish_date' => date('Y-m-d')
+            ]);
+            $recipe_picture->move(public_path('images'), $imageName);
+    
+            return redirect('/');
+        }else{
+            return redirect('bundle');
+        }
+        
     }
+
+    public function saverecipe(Request $request)
+    {
+        $recipe_ingredients = implode(", ", $request->input('recipe_ingredients'));
+        $recipe_equipment = implode(", ", $request->input('recipe_equipment'));
+        $recipe_steps = implode(", ", $request->input('recipe_steps'));
+        $recipe_tips = implode(", ", $request->input('recipe_tips'));
+
+        $recipe_picture = $request->file('recipe_picture');
+        $imageName = time().'.'.$recipe_picture->extension();
+        $bundlelistid = time() . mt_rand(1000, 9999);
+        
+        $blog = Recipe::create([
+            'recipe_id' => $bundlelistid,
+            'recipe_name' => $request->recipe_name,
+            'recipe_ingredients' => $recipe_ingredients,
+            'recipe_equipment' => $recipe_equipment,
+            'recipe_steps' => $recipe_steps,
+            'recipe_tips' => $recipe_tips,
+            'recipe_picture' => $imageName,
+            'category_id' => $request->category_id,
+        ]);
+        $recipe_picture->move(public_path('images'), $imageName);
+    
+        return redirect('/');
+        
+    }
+
     /**
      * Display the specified resource.
      *

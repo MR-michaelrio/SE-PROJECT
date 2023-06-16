@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Bundle_List;
 use App\Models\Mybundle;
+use App\Models\Bundle;
 use App\Models\Bookmark;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Bundle_Controller extends Controller
 {
@@ -17,14 +19,36 @@ class Bundle_Controller extends Controller
      */
     public function index()
     {
-        $Mybundle = Mybundle::where('user_id',Auth::id())->get();
+        $Mybundle = Mybundle::join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+        ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+        ->whereIn('mybundle.mybundle_id', function ($query) {
+            $query->select(DB::raw('MAX(mybundle.mybundle_id)'))
+                ->from('mybundle')
+                ->join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+                ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+                ->where('user_id', '=', Auth::id())
+                ->groupBy('bundle.bundle_id');
+        })
+        ->get();
+
+        // dd($Mybundle);
         $bookmark = Bookmark::where('user_id',Auth::id())->get();
         return view('bundle-main',compact('Mybundle','bookmark'));
     }
 
     public function mypageindex()
     {
-        $Mybundle = Mybundle::where('user_id',Auth::id())->get();
+        $Mybundle = Mybundle::join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+        ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+        ->whereIn('mybundle.mybundle_id', function ($query) {
+            $query->select(DB::raw('MAX(mybundle.mybundle_id)'))
+                ->from('mybundle')
+                ->join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+                ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+                ->where('user_id', '=', Auth::id())
+                ->groupBy('bundle.bundle_id');
+        })
+        ->get();
         return view('bundle-mypage',compact('Mybundle'));
     }
 
@@ -55,18 +79,28 @@ class Bundle_Controller extends Controller
     }
 
     public function onbundle(Request $request){
-        $MyBundle = MyBundle::find($request->onoff);
-        $MyBundle->update([
-            'Bundle_privacy'=>'on',
-        ]);
+        $Mybundle = Mybundle::join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+        ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+        ->where('bundle.bundle_id',$request->test)
+        ->where('mybundle.user_id',Auth::id())
+        ->get();
+        foreach ($Mybundle as $bundle) {
+            $bundle->bundle_privacy = 'on';
+            $bundle->save();
+        }
         return redirect('bundle');
     }
 
     public function offbundle(Request $request){
-        $MyBundle = MyBundle::find($request->test);
-        $MyBundle->update([
-            'Bundle_privacy'=>'off',
-        ]);
+        $Mybundle = Mybundle::join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+        ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+        ->where('bundle.bundle_id',$request->test)
+        ->where('mybundle.user_id',Auth::id())
+        ->get();
+        foreach ($Mybundle as $bundle) {
+            $bundle->bundle_privacy = 'off';
+            $bundle->save();
+        }
         return redirect('bundle');
     }
 
@@ -76,11 +110,51 @@ class Bundle_Controller extends Controller
     }
 
     public function savebookmark(Request $request){
-        Bookmark::create([
+        Bookmark::firstOrCreate([
             'bundle_id' => $request->bundle_id,
             'user_id' => Auth::id()
         ]);
         return back();
+    }
+
+    public function searchbundlepost(Request $request)
+    {
+        $search = $request->search;
+        // dd($search);
+        if($search == ''){
+            return redirect('mypageindex');
+        }else{
+            $Mybundle = Mybundle::join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+            ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+            ->whereIn('mybundle.mybundle_id', function ($query) use ($search) {
+                $query->select(DB::raw('MAX(mybundle.mybundle_id)'))
+                    ->from('mybundle')
+                    ->join('bundle_list', 'mybundle.bundlelist_id', '=', 'bundle_list.bundlelist_id')
+                    ->join('bundle', 'bundle_list.bundle_id', '=', 'bundle.bundle_id')
+                    ->where('user_id', '=', Auth::id())
+                    ->where('bundle.bundle_name', 'LIKE', '%' .$search. '%')
+                    ->groupBy('bundle.bundle_id');
+            })
+            ->get();
+            // dd($Mybundle);
+            return view('bundle-mypage',compact('Mybundle'));
+        }
+    }
+
+    public function searchbookmarkpost(Request $request)
+    {
+        $search = $request->search;
+        // dd($search);
+        if($search == ''){
+            return redirect('indexbookmark');
+        }else{
+            $bookmark = Bookmark::join('bundle', 'bundle.bundle_id', '=', 'bookmark.bundle_id')
+            ->where('user_id',Auth::id())
+            ->where('bundle.bundle_name', 'LIKE', '%' . $search . '%')
+            ->get();
+            
+            return view('bundle-bookmark',compact('bookmark'));        
+        }
     }
     /**
      * Show the form for creating a new resource.

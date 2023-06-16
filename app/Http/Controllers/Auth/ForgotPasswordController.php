@@ -33,19 +33,19 @@ class ForgotPasswordController extends Controller
     public function submitForgetPasswordForm(Request $request)
     {
         $request->validate([
-            'user_email' => 'required|email|exists:users',
+            'email' => 'required|email|exists:users',
         ]);
         $token = random_int(100000, 999999);
 
-        $email = $request->user_email;
+        $email = $request->email;
         DB::table('password_resets')->insert([
-            'email' => $request->user_email, 
+            'email' => $request->email, 
             'token' => $token, 
             'created_at' => Carbon::now()
         ]);
   
         Mail::send('auth.passwords.token', ['token' => $token], function($message) use($request){
-            $message->to($request->user_email);
+            $message->to($request->email);
             $message->subject('Reset Password');
         });
 
@@ -81,21 +81,20 @@ class ForgotPasswordController extends Controller
 
     public function submitResetPasswordForm(Request $request)
     {
-        $email = $request->user_email;
-        $password = $request->user_password;
+        $email = $request->email;
+        $password = $request->password;
 
         $request->validate([
-            'user_email' => 'required|email',
-            'user_password' => 'required|string|min:8'
+            'email' => 'required|email',
+            'password' => 'required|string|min:8'
         ]);
-
-        $user = User::where('user_email','==', $email)->update(
-            ['user_password' => Hash::make($password)],
-            ['user_passwordUpdateDate' => now()]
-        );
+        $user = User::where('email', '=', $email)->update([
+            'password' => Hash::make($password),
+            'user_passwordUpdateDate' => date('Y-m-d H:i:s')
+        ]);
 
         DB::table('password_resets')->where(['email'=> $email])->delete();
 
-        return view('auth.login');
+        return redirect('login');
     }
 }

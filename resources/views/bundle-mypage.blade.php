@@ -16,9 +16,10 @@
         </div>
     </div>
     <div id="formContainer" class="col formContainer">
-        <form action="#" class="formbundle d-flex align-self-end" method="post">
+        <form action="{{ route('searchbundle') }}" class="formbundle d-flex align-self-end" method="post">
+            @csrf
             <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <input type="text" class="input" name="" placeholder="Search my bundle">
+            <input type="text" class="input" name="search" placeholder="Search my bundle">
         </form>
     </div>
   </div>
@@ -26,7 +27,7 @@
 <div class="content">
     <div class="row justify-content-center" id="cardContainer">
     @foreach ($Mybundle as $m)
-        <div class="col-auto card-div justify-content-start" id="card">
+        <div class="col-auto card-div justify-content-start" id="card" style="text-transform: capitalize;">
             <div class="card" style="width: 18rem;">
                 <div class="card-img">
                     <img src="{{ asset('asset/image 10.png') }}"  class="card-img-top">
@@ -36,8 +37,8 @@
                     <h5 class="card-title " style="display: flex;">
                         <img src="{{ asset('asset/user.png') }}" class="menu-username" alt="" srcset="">
                         <div class="row align-items-center">
-                            <div class="menu-title">{{ $m->BundleList->recipe_publish->Recipe->recipe_name }}</div>
-                            <div class="name-menu-title">{{ $m->BundleList->recipe_publish->User->user_name }} - {{ $m->BundleList->recipe_publish->publish_date }}</div>
+                            <div class="menu-title">{{ mb_convert_case($m->bundle_name, MB_CASE_TITLE, "UTF-8") }}</div>
+                            <div class="name-menu-title">{{ $m->User->user_name }} - {{ Carbon\Carbon::parse($m->created_at)->format('d-m-Y') }}</div>
                         </div>
                         <div class="btn-group dropstart">
                             <button type="button" class="btn btn-menu-options" data-bs-toggle="dropdown" aria-expanded="false">

@@ -17,10 +17,10 @@
                 <a class="nav-link side-icon {{ request()->get('page') === 'bundle' ? 'active' : '' }}" href="{{ route('bundle.index', ['page' => 'bundle']) }}"><iconify-icon icon="game-icons:grain-bundle" class="icon"></iconify-icon>Bundle</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link side-icon {{ request()->get('page') === 'account' ? 'active' : '' }}" href="#"><i class="fa-solid fa-user icon"></i>Account</a>
+                <a class="nav-link side-icon {{ request()->get('page') === 'account' ? 'active' : '' }}" href="{{ route('accountpage', ['page' => 'account']) }}"><i class="fa-solid fa-user icon"></i>Account</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link side-icon {{ request()->get('page') === 'create' ? 'active' : '' }}" style="display: flex;" href="{{ route('recipe.index', ['page' => 'create']) }}"><div class="icon"><img src="{{asset('asset/Create.png')}}" alt="" srcset="" class="icon-create"></div>Create</a>
+                <a class="nav-link side-icon {{ request()->get('page') === 'create' ? 'active' : '' }}" style="display: flex;" href="{{ route('recipe.index', ['page' => 'create']) }}"><div class="icon"><img src="{{asset('asset/Create.png')}}" alt="" srcset="" style="{{ request()->get('page') === 'create' ? 'mix-blend-mode: luminosity;filter: brightness(0) invert(1);' : '' }}" class="icon-create"></div>Create</a>
             </li>
             <li class="nav-item">
                 <hr style="border: 1px solid #617A55; opacity: 100%;">

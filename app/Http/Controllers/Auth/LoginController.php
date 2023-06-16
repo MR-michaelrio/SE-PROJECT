@@ -44,13 +44,13 @@ class LoginController extends Controller
 
     public function username()
     {
-        return 'user_email';
+        return 'email';
     }
     public function login(Request $request)
     {
         $credentials = [
-            'email' => $request->input('user_email'),
-            'password' => $request->input('user_password'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
         ];
 
         if (Auth::attempt($credentials)) {

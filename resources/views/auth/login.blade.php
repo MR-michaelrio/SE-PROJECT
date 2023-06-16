@@ -25,10 +25,10 @@
                         <form action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="col-sm-12">
-                                <input type="email" class="input" name="user_email" id="email" placeholder="Email Address">
+                                <input type="email" class="input" name="email" id="email" placeholder="Email Address">
                             </div>
                             <div class="col-sm-12 position-relative">
-                                <input type="password" class="input" name="user_password" id="password" placeholder="Password">
+                                <input type="password" class="input" name="password" id="password" placeholder="Password">
                                 <span id="togglePassword" class="position-absolute top-50 translate-middle-y end-0" style="cursor: pointer;">
                                     <i id="eyeIcon" class="bi bi-eye fs-4"></i>
                                 </span>

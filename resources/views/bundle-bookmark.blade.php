@@ -16,9 +16,10 @@
         </div>
     </div>
     <div id="formContainer" class="col formContainer">
-        <form action="#" class="formbundle d-flex align-self-end" method="post">
+        <form action="{{ route('searchbookmarkpost') }}" class="formbundle d-flex align-self-end" method="post">
+            @csrf
             <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <input type="text" class="input" name="" placeholder="Search my bundle">
+            <input type="text" class="input" name="search" placeholder="Search my bundle">
         </form>
     </div>
   </div>

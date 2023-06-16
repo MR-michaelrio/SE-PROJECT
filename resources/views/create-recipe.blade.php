@@ -38,7 +38,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <div class="container-fluid">
-    <form action="{{ route('recipe.store') }}" method="post" enctype="multipart/form-data">
+    <form action="" id="recipe-form" method="post" enctype="multipart/form-data">
     @csrf
         <div class="row">
             <div class="col-md-8">
@@ -54,7 +54,7 @@
                                         </label>
                                     </li>
                                 </ul>
-                                <input type="text" class="form-control" name="recipe_name" style="background-color:#F0F2EE; border:1px solid #A6B7BE;" placeholder="Insert Recipe Name">
+                                <input type="text" class="form-control" name="recipe_name" oninput="updateHeading(this.value)" style="background-color:#F0F2EE; border:1px solid #A6B7BE;" placeholder="Insert Recipe Name">
                             </div>                    
                         </div>
                         <div class="p-2">
@@ -193,19 +193,20 @@
                                         <span style="font-size:1.5vw; font-weight:500;">PREVIEW</span>
                                     </div>
                                     <div style="margin-left: auto;">
-                                        <button type="submit" class="btn" style="background-color:#75CC75;color:white">Publish</button>
-                                        <button type="button" class="btn" style="background-color:#CC7575;color:white">Discard</button>
+                                        <button type="submit" class="btn" onclick="saveRecipe()" style="background-color:#75CC75;color:white">Save</button>
+                                        <button type="submit" class="btn" onclick="publishRecipe()" style="background-color:#75CC75;color:white">Publish</button>
+                                        <button type="button" class="btn" onclick="discardRecipe()" style="background-color:#CC7575;color:white">Discard</button>
                                     </div>
                                 </div>   
                                 <div>
                                     <span style="font-size:1.5vw; font-weight:500;">FOOD IMAGE</span>
                                 </div> 
-                                <input type="file" name="recipe_picture" id="image" class="form-control" style="background-color:#F0F2EE; border:1px solid #A6B7BE;" accept="image/*" onchange="previewImage(event)">
+                                <input type="file" name="recipe_picture" id="image" class="form-control"  accept=".jpg, .jpeg, .png" style="background-color:#F0F2EE; border:1px solid #A6B7BE;" accept="image/*" onchange="previewImage(event)">
                                 <img id="preview" src="" style="display:none; width:100%; height:263px;margin-top:20px;">
                                 <div class="mt-3 mb-3">
-                                    <span><h1 style="font-size:2vw; font-weight:bold">FRUIT SALAD</h1></span>
+                                    <span><h1 style="font-size:2vw; font-weight:bold" id="recipe-heading">-</h1></span>
                                     <hr class="border border-1 opacity-100 m-0 p-0" style="border-color:#283123 !important;">
-                                    <span>Username - 20 Apr 2023</span>
+                                    <span style="text-transform:capitalize">{{ Auth::user()->user_name }} - {{ date('d M Y') }}</span>
                                 </div>
                             </div>     
                         </div>
@@ -219,7 +220,7 @@
                                 </li>
                                 <li class="list-group-item d-flex" style="font-size:1vw; border:0px;background-color:#F0F2EE;">
                                     <div class="m-0 p-0" style="width:100%">
-                                        <ul id="ingredientsList"></ul>
+                                        <ol id="ingredientsList"></ol>
                                     </div> 
                                 </li>
                             </ul>
@@ -234,7 +235,7 @@
                                 </li>
                                 <li class="list-group-item d-flex" style="font-size:1vw; border:0px;background-color:#F0F2EE;">
                                     <div class="m-0 p-0" style="width:100%">
-                                        <ul id="equipmentList"></ul>
+                                        <ol id="equipmentList"></ol>
                                     </div> 
                                 </li>
                             </ul>
@@ -249,7 +250,7 @@
                                 </li>
                                 <li class="list-group-item d-flex" style="font-size:1vw; border:0px;background-color:#F0F2EE;">
                                     <div class="m-0 p-0" style="width:100%">
-                                        <ul id="stepsList"></ul>
+                                        <ol id="stepsList"></ol>
                                     </div> 
                                 </li>
                             </ul>
@@ -260,6 +261,24 @@
         </div>
     </form>
 </div>
+<script>
+    function saveRecipe() {
+        document.getElementById("recipe-form").action = "saverecipe";
+    }
+    
+    function publishRecipe() {
+        document.getElementById("recipe-form").action = "publishrecipe";
+    }
+    
+    function discardRecipe() {
+        window.location.href = "index";
+    }
+</script>
+<script>
+    function updateHeading(value) {
+        document.getElementById("recipe-heading").innerText = value;
+    }
+</script>
 <script>
   $(document).ready(function() {
     var i = 1;

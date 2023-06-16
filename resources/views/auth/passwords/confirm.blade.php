@@ -27,7 +27,7 @@
                             @csrf
                             <div class="col-sm-8">
                                 <p class="text-center">Please, enter the verification code we sent to your email</p>
-                                <input type="text" name="email" value="<?= $_GET['email'] ?>">
+                                <input type="hidden" name="email" value="<?= $_GET['email'] ?>">
                             </div>
                             <div class="col-sm-7" style="color: #949494;">
                                 <p class="text-center"><span id="timer">01:00</span></p>

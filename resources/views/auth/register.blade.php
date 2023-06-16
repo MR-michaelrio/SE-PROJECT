@@ -42,8 +42,8 @@
                             @enderror
                         </div>
                         <div class="col-sm-12">
-                            <input type="email" class="input @error('user_email') is-invalid @enderror" name="user_email" value="{{ old('user_email') }}" id="email" placeholder="Email address">
-                            @error('user_email')
+                            <input type="email" class="input @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="email" placeholder="Email address">
+                            @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -71,8 +71,8 @@
                     </div>
                     <div class="col-12">
                         <div class="col-sm-12">
-                            <input type="password" class="input @error('user_password') is-invalid @enderror" name="user_password" placeholder="Password">
-                            @error('user_password')
+                            <input type="password" class="input @error('password') is-invalid @enderror" name="password" placeholder="Password">
+                            @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -96,7 +96,7 @@
 </form>
 </body>
 <script>
-    @if ($errors->has('user_password'))
+    @if ($errors->has('password'))
         nextPage();
     @endif
     function nextPage() {

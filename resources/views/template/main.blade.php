@@ -16,11 +16,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
-@include('template.navbar')
-@include('template.sidebar')
 <body class="body">
-    <div class="container-fluid">
-        @yield('content')
+    <div class="container-fluid head" style="position: fixed; top: 0; width: 100%; z-index: 100;">
+        @include('template.navbar')
+    </div>
+    <div class="container-fluid" style="padding-top: 100px;">
+        @include('template.sidebar')
+        <div class="container-fluid">
+            @yield('content')
+        </div>
     </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
