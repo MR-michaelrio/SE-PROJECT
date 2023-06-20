@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
     <title>@yield('title')</title>
+    <link rel="icon" href="{{asset('asset/Food Library Logo 1.png')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>

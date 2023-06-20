@@ -101,18 +101,25 @@
                                 <span style="text-transform:capitalize">@foreach($recipe as $r) {{$r->recipe_publish->user->user_name}} - {{ Carbon\Carbon::parse($r->recipe_publish->publish_date)->format('d M Y') }} @endforeach</span>
                             </div>
                             <div class="button-container">
-                                <button type="submit" class="btn" onclick="saveRecipe()"
+                                <!-- <button type="submit" class="btn" onclick="saveRecipe()"
                                     style="background-color:#D0D7CC;border-radius:30px;color:black;"><img
                                         src="{{asset('asset/game-icons_grain-bundle.png')}}"
-                                        style="width:30%;margin-right:10px" alt="" srcset="">Add</button>
-                                <button type="submit" class="btn" onclick="publishRecipe()"
+                                        style="width:30%;margin-right:10px" alt="" srcset="">Add</button> -->
+                                <!-- <button type="submit" class="btn" onclick="publishRecipe()"
                                     style="background-color:#D0D7CC;border-radius:30px;color:black;margin-left:5px">
                                     <iconify-icon icon="majesticons:share-line"></iconify-icon>Share
-                                </button>
-                                <button type="button" class="btn" onclick="discardRecipe()"
-                                    style="background-color:#D0D7CC;border-radius:30px;color:black;margin-left:5px">
-                                    <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>Discard
-                                </button>
+                                </button> -->
+                                @if(Auth::id() == $recipe[0]->recipe_publish->user->user_id)
+                                    @php
+                                        $id = basename(request()->url());
+                                    @endphp
+                                    <a href="{{ route('editrecipe', ['id' => $id]) }}" class="btn" style="background-color:#D0D7CC;border-radius:30px;color:black;margin-left:5px">
+                                        <iconify-icon icon="uil:edit"></iconify-icon>Edit
+                                    </a>
+                                    <a href="{{ route('deleterecipe', ['id' => $id]) }}" class="btn" style="background-color:#D0D7CC;border-radius:30px;color:black;margin-left:5px">
+                                        <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>Discard
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -241,6 +248,7 @@
         <div class="col-4">
             <div class="scrollable-content">
                 @foreach($recipe_publish as $rp)
+                <a href="{{ route('foodrecipe', ['id' => $rp->recipe_id]) }}">
                 <div class="card mb-3 mt-3" style="max-width: 540px;">
                     <div class="row g-0">
                         <div class="col-md-4 d-flex align-items-center justify-content-center">
@@ -255,10 +263,21 @@
                         </div>
                     </div>
                 </div>
+                </a>
                 @endforeach
 
             </div>
         </div>
     </div>
 </div>
+<script>
+    function saveRecipe() {
+        document.getElementById("recipe-form").action = "saverecipe";
+    }
+    
+    function publishRecipe() {
+        document.getElementById("recipe-form").action = "publishrecipe";
+    }
+    
+</script>
 @endsection

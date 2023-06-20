@@ -25,8 +25,7 @@ class Recipe_Controller extends Controller
 
     public function foodrecipe($id){
         $recipe = recipe::where('recipe_id',$id)->get();
-        $recipe_publish = recipe_publish::take(15)->get();
-        // dd($recipe);
+        $recipe_publish = recipe_publish::inRandomOrder()->take(15)->get();
         return view('food-recipe',compact('recipe','recipe_publish'));
     }
 
@@ -132,6 +131,53 @@ class Recipe_Controller extends Controller
         
     }
 
+    public function deleterecipe($id)
+    {
+        $recipe_publish = recipe_publish::where('recipe_id',$id);
+        $recipe_publish->delete();
+    
+        $Recipe = Recipe::where('recipe_id',$id);
+        $Recipe->delete();
+        
+        return redirect('index');
+    }
+
+    public function editrecipe($id)
+    {
+        $recipe = Recipe::where('recipe_id',$id)->get();
+        $category = Category::all();
+        return view('edit-recipe',compact('recipe','category'));
+    }
+
+    public function saverecipeedit(Request $request, $id){
+        $record = Recipe::findOrFail($id);
+        $recipe_ingredients = implode(", ", $request->input('recipe_ingredients'));
+        $recipe_equipment = implode(", ", $request->input('recipe_equipment'));
+        $recipe_steps = implode(", ", $request->input('recipe_steps'));
+        $recipe_tips = implode(", ", $request->input('recipe_tips'));
+
+        if(isset($foto)){
+            $foto = $request->file('recipe_picture');
+            $imageName = time().'.'.$foto->extension();
+            $record->recipe_picture = $imageName;
+
+        }
+        
+        $record->recipe_name = $request->recipe_name;
+        $record->recipe_ingredients = $recipe_ingredients;
+        $record->recipe_equipment = $recipe_equipment;
+        $record->recipe_steps = $recipe_steps;
+        $record->recipe_tips = $recipe_tips;
+        $record->category_id = $request->category_id;
+
+        $record->save();
+
+        if(isset($foto)){
+            $foto->move(public_path('images'), $imageName);
+        }
+
+        return redirect('foodrecipe/'.$request->id);
+    }
     /**
      * Display the specified resource.
      *

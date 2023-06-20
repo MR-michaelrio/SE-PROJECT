@@ -371,7 +371,7 @@
 
                     <div class="row mt-3">
                         <div class="col">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn" style="background-color:#617A55;color:white;font-size:20px;border-radius:50px">Submit</button>
                         </div>
                     </div>
                 </form>

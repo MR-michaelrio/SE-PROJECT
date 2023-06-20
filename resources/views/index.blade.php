@@ -18,7 +18,9 @@ use Illuminate\Support\Str;
                     <img src="{{ asset('images/'.$item->Recipe->recipe_picture) }}" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title" style="display: flex;">
-                            <img src="{{ asset('asset/user.png') }}" class="menu-username" alt="" srcset="">
+                            <div class="">
+                                <img src="{{ asset('user/'.$item->User->user_profile) }}" class="menu-username" alt="" srcset="">
+                            </div>
                             <div class="row align-items-center">
                                 <div class="menu-title">
                                     {{ ucfirst(strtolower(Str::limit($item->Recipe->recipe_name, 15, '...'))) }}</div>

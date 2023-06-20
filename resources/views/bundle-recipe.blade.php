@@ -120,14 +120,14 @@
                                     style="background-color:#D0D7CC;border-radius:30px;color:black;"><img
                                         src="{{asset('asset/game-icons_grain-bundle.png')}}"
                                         style="width:30%;margin-right:10px" alt="" srcset="">Add</button>
-                                <button type="submit" class="btn" onclick="publishRecipe()"
+                                <!-- <button type="submit" class="btn" onclick="publishRecipe()"
                                     style="background-color:#D0D7CC;border-radius:30px;color:black;margin-left:5px">
                                     <iconify-icon icon="majesticons:share-line"></iconify-icon>Share
-                                </button>
-                                <button type="button" class="btn" onclick="discardRecipe()"
+                                </button> -->
+                                <!-- <button type="button" class="btn" onclick="discardRecipe()"
                                     style="background-color:#D0D7CC;border-radius:30px;color:black;margin-left:5px">
                                     <iconify-icon icon="material-symbols:delete-outline"></iconify-icon>Discard
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>
@@ -283,6 +283,7 @@
                 <div class="col">
                     <div class="scrollable-content">
                         @foreach($recipe as $rp)
+                        <a href="{{ route('foodrecipe', ['id' => $rp->recipe_id]) }}">
                         <div class="card mb-3 mt-3" style="max-width: 540px;">
                             <div class="row g-0">
                                 <div class="col-md-4 d-flex align-items-center justify-content-center">
@@ -297,6 +298,7 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                         @endforeach
                     </div>
                 </div>

@@ -37,6 +37,10 @@ Route::middleware(['auth'])->group(function () {
 
     route::get('foodrecipe/{id}', [Recipe_Controller::class, 'foodrecipe'])->name('foodrecipe');
     route::get('bundlerecipe/{id}/{bundlelistid}/{user}', [Recipe_Controller::class, 'bundlerecipe'])->name('bundlerecipe');
+    route::get('deletefoodrecipe/{id}', [Recipe_Controller::class, 'deleterecipe'])->name('deleterecipe');
+
+    route::get('editrecipe/{id}', [Recipe_Controller::class, 'editrecipe'])->name('editrecipe');
+    route::post('editrecipe/{id}', [Recipe_Controller::class, 'saverecipeedit'])->name('saverecipeedit');
 
     //BUNDLE
     route::resource('bundle', Bundle_Controller::class);

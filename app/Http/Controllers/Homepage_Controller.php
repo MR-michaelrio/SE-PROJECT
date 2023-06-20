@@ -18,7 +18,7 @@ class Homepage_Controller extends Controller
     {
         DB::statement('SET sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""))');
 
-        $recipe = recipe_publish::all();
+        $recipe = recipe_publish::inRandomOrder()->get();
         $bundle_list = Bundle_List::whereHas('MyBundle', function ($query) {
             $query->where('Bundle_privacy', 'on');
         })->groupBy('bundle_id')->get();
